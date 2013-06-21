@@ -11,6 +11,11 @@ class Archive_Tar extends Archive_Base {
     const COMPRESS_GZIP = 2;
     const COMPRESS_BZIP2 = 2;
 
+    public function __construct($mode = self::COMPRESS_GZIP) {
+        $this->mode = $mode;
+        parent::__construct();
+    }
+
     /**
      * Indica el modo en el que se creará el fichero (tar, tgz, tarbz, etc.)
      * @var int
@@ -54,11 +59,12 @@ class Archive_Tar extends Archive_Base {
             throw new RuntimeException("File '$path' cannot be opened");
 
         //Escribir fichero TAR
+        $file_count = 0;
         foreach ($files as $file) {
             $path = str_replace('\\', '/', $file->path);
             if (strlen($path) > 99) {
                 //Dividir la ruta en dos debido a las limitaciones de TAR
-                $prefix = substr($path, 0, strrpos($path, '/', 154) + 1);
+                $prefix = substr($path, 0, strrpos(substr($path, 0, min(154, strlen($path))), '/') + 1);
                 $path = substr($path, strlen($prefix));
 
                 if (strlen($prefix) > 154 || strlen($path) > 99) {
@@ -122,6 +128,8 @@ class Archive_Tar extends Archive_Base {
                 if ($file->real_path)
                     fclose($fileh);
             }
+            
+            $file_count++;
         }
 
         //Cerrar fichero
@@ -139,7 +147,7 @@ class Archive_Tar extends Archive_Base {
                 break;
         }
 
-        return TRUE;
+        return $file_count;
     }
 
 }

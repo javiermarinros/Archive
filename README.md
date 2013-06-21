@@ -1,6 +1,7 @@
 Example of use:
 
-```<?php
+```php
+<?php
 
 require 'Base.php';
 require 'Tar.php';
@@ -33,7 +34,8 @@ $compressor->add_data('long/path/to/file/long/path/to/file/long/path/to/file/lon
 
 $compressor->create(dirname(__FILE__) . '/created.zip');
 
-?>```` 
+?>
+```` 
 
 
 

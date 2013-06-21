@@ -123,7 +123,9 @@ class Archive_Zip extends Archive_Base {
         if (!empty($this->comment))
             fwrite($archiveh, $this->comment);
 
-        return fclose($archiveh);
+        fclose($archiveh);
+
+        return $file_count;
     }
 
     /**

@@ -19,6 +19,10 @@ abstract class Archive_Base {
      */
     public $log;
 
+    public function __construct() {
+        
+    }
+
     /**
      * Añade un fichero(s) al archivo dada su ruta
      * @param string|string[] $path
@@ -79,6 +83,18 @@ abstract class Archive_Base {
 
         //Incluir archivos e información sobre ellos
         foreach ($this->_data as $info) {
+            //Comprobar si el archivo ya existe
+            $found = FALSE;
+            foreach ($files as $f) {
+                if ($f == $info['name']) {
+                    $found = TRUE;
+                    break;
+                }
+            }
+            if ($found)
+                continue;
+
+            //Crear descriptor de archivo
             $file = new Archive_File();
             $file->path = $info['name'];
 
@@ -128,6 +144,7 @@ abstract class Archive_Base {
 
     /**
      * Crea el archivo comprimido en la ruta indicada
+     * @return int Número de archivos añadidos
      */
     public abstract function create($path);
 }
